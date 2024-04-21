@@ -1,7 +1,9 @@
 import math
 from decimal import Decimal as decimal
 from types import NotImplementedType
-from typing import Self, overload, dataclass_transform
+from typing import Self, dataclass_transform, overload
+
+from ._currency import Currency
 
 
 class OverloadPaddingType1:
@@ -25,8 +27,8 @@ class Money:
 	value: decimal
 
 	@property
-	def currency(self) -> str:
-		return type(self).__name__
+	def currency(self) -> Currency:
+		return type(self)  # type: ignore
 
 	def __init__(self, value: decimal | str | int):
 		if type(self) == Money:
