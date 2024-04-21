@@ -7,6 +7,9 @@ from ._money import OverloadPaddingType1, OverloadPaddingType2
 
 class TypedMoneyMixin:
 
+	def __init__(self, value: decimal | str | int):
+		...
+
 	@overload
 	def __lt__(self, other: OverloadPaddingType1) -> NotImplementedType:
 		...
