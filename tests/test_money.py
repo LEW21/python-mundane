@@ -4,7 +4,8 @@ import unittest
 from decimal import Decimal as decimal
 from typing import assert_type, cast
 
-from mundane import Money, AnyMoney, PLN, EUR
+from mundane import Money, AnyMoney, TypedMoney, PLN, EUR
+from mundane import USD as OfficialUSD
 
 
 class TestMoney(unittest.TestCase):
@@ -217,3 +218,19 @@ class TestMoney(unittest.TestCase):
 		take_money_strict(val)
 		take_money(val)  # type: ignore
 		take_money(cast(AnyMoney, val))
+
+	def test_currencies_with_same_name(self):
+
+		class USD(TypedMoney):
+			pass
+
+		assert str(USD(5).currency) == str(OfficialUSD(5).currency)
+		assert USD(5) != OfficialUSD(5)
+		assert USD(5).currency != OfficialUSD(5).currency
+
+		try:
+			USD(5) + OfficialUSD(5)  # type: ignore
+		except TypeError:
+			pass
+		else:
+			assert False
