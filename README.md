@@ -1,5 +1,5 @@
 # mundane
-Pythonic Money class, with awesome type-safety.
+Pythonic Money class. Correct. Type-safe. Matches expectations.
 
 ## Installation
 ```sh
