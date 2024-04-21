@@ -30,3 +30,6 @@ use_tabs = true
 column_limit = 99999
 spaces_around_default_or_named_assign = true
 continuation_align_style = "fixed"
+
+[tool.hatch.build.targets.sdist]
+exclude = [".venv"]
