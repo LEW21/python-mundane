@@ -3,4 +3,4 @@ from ._currency import Currency
 
 
 class TypedMoney(AnyMoney, metaclass = Currency):
-	__slots__ = []
+	pass
