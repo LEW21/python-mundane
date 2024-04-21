@@ -6,6 +6,7 @@ from ._money import OverloadPaddingType1, OverloadPaddingType2
 
 
 class TypedMoneyMixin:
+	__slots__ = ()
 
 	def __init__(self, value: decimal | str | int):
 		...

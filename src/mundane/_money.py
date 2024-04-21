@@ -196,6 +196,3 @@ class Money:
 
 	def __ceil__(self) -> Self:
 		return type(self)(currency = self.currency, value = math.ceil(self.value))
-
-
-from . import _any_money  # type: ignore
