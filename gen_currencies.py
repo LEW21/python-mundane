@@ -44,10 +44,11 @@ class {currency}(TypedMoney):
 
 with open('src/mundane/__init__.py', 'w') as out:
 	out.write(f'''# isort: skip_file
+from ._currency import Currency
 from ._money import Money
 from ._any_money import AnyMoney
 from ._typed_money import TypedMoney
 from ._currencies import *
 
-__all__ = ['Money', 'AnyMoney', 'TypedMoney', {', '.join(f'\'{currency}\'' for currency in currencies)}]
+__all__ = ['Currency', 'Money', 'AnyMoney', 'TypedMoney', {', '.join(f'\'{currency}\'' for currency in currencies)}]
 ''')
