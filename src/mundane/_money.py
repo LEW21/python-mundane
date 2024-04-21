@@ -21,12 +21,16 @@ def freeze_money[T](cls: T) -> T:
 
 @freeze_money
 class Money:
-	__slots__ = ['currency', 'value']
-	currency: str
+	__slots__ = ('value',)
 	value: decimal
 
-	def __init__(self, currency: str, value: decimal | str | int):
-		object.__setattr__(self, 'currency', currency)
+	@property
+	def currency(self) -> str:
+		return type(self).__name__
+
+	def __init__(self, value: decimal | str | int):
+		if type(self) == Money:
+			raise TypeError("'Money' cannot be instantiated")
 		object.__setattr__(self, 'value', decimal(value))
 
 	def __str__(self):
@@ -104,13 +108,13 @@ class Money:
 		return self.value >= other.value
 
 	def __pos__(self) -> Self:
-		return type(self)(currency = self.currency, value = +self.value)
+		return type(self)(value = +self.value)
 
 	def __neg__(self) -> Self:
-		return type(self)(currency = self.currency, value = -self.value)
+		return type(self)(value = -self.value)
 
 	def __abs__(self) -> Self:
-		return type(self)(currency = self.currency, value = abs(self.value))
+		return type(self)(value = abs(self.value))
 
 	@overload
 	def __add__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -125,7 +129,7 @@ class Money:
 			return NotImplemented
 		if self.currency != other.currency:
 			raise TypeError(f"'+' not supported between money in '{self.currency}' and '{other.currency}'")
-		return type(self)(currency = self.currency, value = self.value + other.value)
+		return type(self)(value = self.value + other.value)
 
 	@overload
 	def __sub__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -140,7 +144,7 @@ class Money:
 			return NotImplemented
 		if self.currency != other.currency:
 			raise TypeError(f"'-' not supported between money in '{self.currency}' and '{other.currency}'")
-		return type(self)(currency = self.currency, value = self.value - other.value)
+		return type(self)(value = self.value - other.value)
 
 	@overload
 	def __mul__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -152,7 +156,7 @@ class Money:
 
 	def __mul__(self, other: object) -> Self | NotImplementedType:
 		if isinstance(other, int) or isinstance(other, decimal):  # type: ignore
-			return type(self)(currency = self.currency, value = self.value * other)
+			return type(self)(value = self.value * other)
 		return NotImplemented
 
 	@overload
@@ -165,7 +169,7 @@ class Money:
 
 	def __rmul__(self, other: object) -> Self | NotImplementedType:
 		if isinstance(other, int) or isinstance(other, decimal):  # type: ignore
-			return type(self)(currency = self.currency, value = self.value * other)
+			return type(self)(value = self.value * other)
 		return NotImplemented
 
 	@overload
@@ -178,7 +182,7 @@ class Money:
 
 	def __truediv__(self, other: object) -> decimal | Self | NotImplementedType:
 		if isinstance(other, int) or isinstance(other, decimal):
-			return type(self)(currency = self.currency, value = self.value / other)
+			return type(self)(value = self.value / other)
 		if not isinstance(other, Money):  # type: ignore
 			return NotImplemented
 		if self.currency != other.currency:
@@ -186,13 +190,13 @@ class Money:
 		return self.value / other.value
 
 	def __round__(self, ndigits: int | None = None) -> Self:
-		return type(self)(currency = self.currency, value = round(self.value, ndigits))
+		return type(self)(value = round(self.value, ndigits))
 
 	def __trunc__(self) -> Self:
-		return type(self)(currency = self.currency, value = math.trunc(self.value))
+		return type(self)(value = math.trunc(self.value))
 
 	def __floor__(self) -> Self:
-		return type(self)(currency = self.currency, value = math.floor(self.value))
+		return type(self)(value = math.floor(self.value))
 
 	def __ceil__(self) -> Self:
-		return type(self)(currency = self.currency, value = math.ceil(self.value))
+		return type(self)(value = math.ceil(self.value))

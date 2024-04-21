@@ -10,15 +10,17 @@ from mundane import Money, AnyMoney, PLN, EUR
 class TestMoney(unittest.TestCase):
 
 	def test_basic(self):
+		try:
+			Money(50)
+		except TypeError:
+			pass
+		else:
+			assert False
 		assert_type(PLN(50), PLN)
 		assert isinstance(PLN(50), PLN)
 		assert isinstance(PLN(50), Money)
 		assert PLN(50).value == 50
 		assert PLN(50).currency == 'PLN'
-		assert isinstance(Money('PLN', 50), PLN)
-		assert isinstance(Money('EUR', 50), EUR)
-		assert not isinstance(Money('PLN', 50), EUR)
-		assert not isinstance(Money('EUR', 50), PLN)
 		assert isinstance(PLN(50), PLN)
 		assert isinstance(EUR(50), EUR)
 		assert not isinstance(PLN(50), EUR)
@@ -66,7 +68,6 @@ class TestMoney(unittest.TestCase):
 	def test_eq(self):
 		assert_type(PLN(50) == PLN(100), bool)
 		assert PLN(50) == PLN('50') == PLN(decimal('50'))
-		assert PLN(50) == Money('PLN', 50)
 		assert PLN(50) != PLN(100)
 		assert PLN(50) != EUR(50)
 

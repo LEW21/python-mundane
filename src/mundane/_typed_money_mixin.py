@@ -8,9 +8,6 @@ from ._money import OverloadPaddingType1, OverloadPaddingType2
 class TypedMoneyMixin:
 	__slots__ = ()
 
-	def __init__(self, value: decimal | str | int):
-		...
-
 	@overload
 	def __lt__(self, other: OverloadPaddingType1) -> NotImplementedType:
 		...
@@ -24,7 +21,7 @@ class TypedMoneyMixin:
 		...
 
 	def __lt__(self, other: object) -> bool | NotImplementedType:
-		...
+		return super().__lt__(other)  # type: ignore
 
 	@overload
 	def __le__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -39,7 +36,7 @@ class TypedMoneyMixin:
 		...
 
 	def __le__(self, other: object) -> bool | NotImplementedType:
-		...
+		return super().__le__(other)  # type: ignore
 
 	@overload
 	def __gt__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -54,7 +51,7 @@ class TypedMoneyMixin:
 		...
 
 	def __gt__(self, other: object) -> bool | NotImplementedType:
-		...
+		return super().__gt__(other)  # type: ignore
 
 	@overload
 	def __ge__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -69,7 +66,7 @@ class TypedMoneyMixin:
 		...
 
 	def __ge__(self, other: object) -> bool | NotImplementedType:
-		...
+		return super().__ge__(other)  # type: ignore
 
 	@overload
 	def __add__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -84,7 +81,7 @@ class TypedMoneyMixin:
 		...
 
 	def __add__(self, other: object) -> Self | NotImplementedType:
-		...
+		return super().__add__(other)  # type: ignore
 
 	@overload
 	def __sub__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -99,7 +96,7 @@ class TypedMoneyMixin:
 		...
 
 	def __sub__(self, other: object) -> Self | NotImplementedType:
-		...
+		return super().__sub__(other)  # type: ignore
 
 	@overload
 	def __truediv__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -114,4 +111,4 @@ class TypedMoneyMixin:
 		...
 
 	def __truediv__(self, other: object) -> decimal | Self | NotImplementedType:
-		...
+		return super().__truediv__(other)  # type: ignore
