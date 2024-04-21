@@ -2,7 +2,7 @@ import math
 import random
 import unittest
 from decimal import Decimal as decimal
-from typing import assert_type
+from typing import assert_type, cast
 
 from mundane import Money, AnyMoney, PLN, EUR
 
@@ -214,4 +214,5 @@ class TestMoney(unittest.TestCase):
 			assert money.currency in {'PLN', 'EUR'}
 
 		take_money_strict(val)
-		take_money(val)
+		take_money(val)  # type: ignore
+		take_money(cast(AnyMoney, val))
