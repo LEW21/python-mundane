@@ -13,63 +13,63 @@ class AnyMoney(Money):
 
 	@overload
 	def __lt__(self, other: OverloadPaddingType1) -> NotImplementedType:
-		pass
+		...
 
 	@overload
 	def __lt__(self, other: OverloadPaddingType2) -> NotImplementedType:
-		pass
+		...
 
 	@overload
 	def __lt__(self, other: Self) -> bool:
 		...
 
 	def __lt__(self, other: object) -> bool | NotImplementedType:
-		return super().__lt__(other)  # type: ignore
+		...
 
 	@overload
 	def __le__(self, other: OverloadPaddingType1) -> NotImplementedType:
-		pass
+		...
 
 	@overload
 	def __le__(self, other: OverloadPaddingType2) -> NotImplementedType:
-		pass
+		...
 
 	@overload
 	def __le__(self, other: Self) -> bool:
 		...
 
 	def __le__(self, other: object) -> bool | NotImplementedType:
-		return super().__le__(other)  # type: ignore
+		...
 
 	@overload
 	def __gt__(self, other: OverloadPaddingType1) -> NotImplementedType:
-		pass
+		...
 
 	@overload
 	def __gt__(self, other: OverloadPaddingType2) -> NotImplementedType:
-		pass
+		...
 
 	@overload
 	def __gt__(self, other: Self) -> bool:
 		...
 
 	def __gt__(self, other: object) -> bool | NotImplementedType:
-		return super().__gt__(other)  # type: ignore
+		...
 
 	@overload
 	def __ge__(self, other: OverloadPaddingType1) -> NotImplementedType:
-		pass
+		...
 
 	@overload
 	def __ge__(self, other: OverloadPaddingType2) -> NotImplementedType:
-		pass
+		...
 
 	@overload
 	def __ge__(self, other: Self) -> bool:
 		...
 
 	def __ge__(self, other: object) -> bool | NotImplementedType:
-		return super().__ge__(other)  # type: ignore
+		...
 
 	@overload
 	def __add__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -84,7 +84,7 @@ class AnyMoney(Money):
 		...
 
 	def __add__(self, other: object) -> Self | NotImplementedType:
-		return super().__add__(other)  # type: ignore
+		...
 
 	@overload
 	def __sub__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -99,7 +99,7 @@ class AnyMoney(Money):
 		...
 
 	def __sub__(self, other: object) -> Self | NotImplementedType:
-		return super().__sub__(other)  # type: ignore
+		...
 
 	@overload
 	def __truediv__(self, other: OverloadPaddingType1) -> NotImplementedType:
@@ -114,4 +114,4 @@ class AnyMoney(Money):
 		...
 
 	def __truediv__(self, other: object) -> decimal | Self | NotImplementedType:
-		return super().__truediv__(other)  # type: ignore
+		...
