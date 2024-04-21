@@ -30,9 +30,7 @@ for currency in currencies:
 	assert '\'' not in currency
 
 with open('src/mundane/_currencies.py', 'w') as out:
-	out.write(f'''from typing import Literal
-
-from ._currency import Currency
+	out.write(f'''from ._typed_money import TypedMoney
 
 __all__ = [{', '.join(f'\'{currency}\'' for currency in currencies)}]
 ''')
@@ -40,18 +38,16 @@ __all__ = [{', '.join(f'\'{currency}\'' for currency in currencies)}]
 	for currency in currencies:
 		out.write(f'''
 
-class {currency}(Currency):
-	__slots__ = []
-
-	@property
-	def id(self) -> Literal['{currency}']:
-		return '{currency}'
+class {currency}(TypedMoney):
+	pass
 ''')
 
 with open('src/mundane/__init__.py', 'w') as out:
-	out.write(f'''from ._currencies import *
-from ._currency import Currency
+	out.write(f'''# isort: skip_file
 from ._money import Money
+from ._any_money import AnyMoney
+from ._typed_money import TypedMoney
+from ._currencies import *
 
-__all__ = ['Money', 'Currency', {', '.join(f'\'{currency}\'' for currency in currencies)}]
+__all__ = ['Money', 'AnyMoney', 'TypedMoney', {', '.join(f'\'{currency}\'' for currency in currencies)}]
 ''')

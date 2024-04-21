@@ -37,15 +37,10 @@ Supported operations (a and b are money instances with matching currency):
 
 ## Define your own currency
 ```py
-from typing import Literal
-from mundane import Currency
+from mundane import TypedMoney
 
-class BTC(Currency):
-	__slots__ = []
-
-	@property
-	def id(self) -> Literal['BTC']:
-		return 'BTC'
+class BTC(TypedMoney):
+    pass
 
 print(BTC('0.0000000000000000000000000001'))
 # BTC 0.0000000000000000000000000001

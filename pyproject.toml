@@ -21,7 +21,6 @@ dependencies = []
 
 [tool.pyright]
 typeCheckingMode = "strict"
-pythonVersion = "3.13"
 
 [tool.isort]
 line_length = 99999

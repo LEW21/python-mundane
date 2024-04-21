@@ -1,24 +1,33 @@
 import math
-import sys
 from decimal import Decimal as decimal
-from typing import TYPE_CHECKING, Generic, Self, TypeVar, overload
-
-from ._currency import Currency
-
-if sys.version_info >= (3, 13) or TYPE_CHECKING:
-	C = TypeVar('C', bound = Currency, default = Currency, covariant = True)
-else:
-	C = TypeVar('C', bound = Currency, covariant = True)
+from types import NotImplementedType
+from typing import Self, overload, dataclass_transform
 
 
-class Money(Generic[C]):
+class OverloadPaddingType1:
+	pass
+
+
+class OverloadPaddingType2:
+	pass
+
+
+@dataclass_transform(frozen_default=True)
+def freeze_money[T](cls: T) -> T:
+	def setattr(*args: object):
+		raise AttributeError("'Money' is frozen")
+	cls.__setattr__ = setattr
+	return cls
+
+@freeze_money
+class Money:
 	__slots__ = ['currency', 'value']
-	currency: C
+	currency: str
 	value: decimal
 
-	def __init__(self, currency: C, value: decimal | str | int):
-		self.currency = currency
-		self.value = decimal(value)
+	def __init__(self, currency: str, value: decimal | str | int):
+		object.__setattr__(self, 'currency', currency)
+		object.__setattr__(self, 'value', decimal(value))
 
 	def __str__(self):
 		return f"{self.currency} {self.value:f}"
@@ -34,28 +43,60 @@ class Money(Generic[C]):
 			return (self.currency, self.value) == (other.currency, other.value)
 		return NotImplemented
 
-	def __lt__(self, other: Self) -> bool:
+	@overload
+	def __lt__(self, other: OverloadPaddingType1) -> NotImplementedType:
+		pass
+
+	@overload
+	def __lt__(self, other: OverloadPaddingType2) -> NotImplementedType:
+		pass
+
+	def __lt__(self, other: object) -> bool | NotImplementedType:
 		if not isinstance(other, Money):
 			return NotImplemented
 		if self.currency != other.currency:
 			raise TypeError(f"'<' not supported between money in '{self.currency}' and '{other.currency}'")
 		return self.value < other.value
 
-	def __le__(self, other: Self) -> bool:
+	@overload
+	def __le__(self, other: OverloadPaddingType1) -> NotImplementedType:
+		pass
+
+	@overload
+	def __le__(self, other: OverloadPaddingType2) -> NotImplementedType:
+		pass
+
+	def __le__(self, other: object) -> bool | NotImplementedType:
 		if not isinstance(other, Money):
 			return NotImplemented
 		if self.currency != other.currency:
 			raise TypeError(f"'<=' not supported between money in '{self.currency}' and '{other.currency}'")
 		return self.value <= other.value
 
-	def __gt__(self, other: Self) -> bool:
+	@overload
+	def __gt__(self, other: OverloadPaddingType1) -> NotImplementedType:
+		pass
+
+	@overload
+	def __gt__(self, other: OverloadPaddingType2) -> NotImplementedType:
+		pass
+
+	def __gt__(self, other: object) -> bool | NotImplementedType:
 		if not isinstance(other, Money):
 			return NotImplemented
 		if self.currency != other.currency:
 			raise TypeError(f"'>' not supported between money in '{self.currency}' and '{other.currency}'")
 		return self.value > other.value
 
-	def __ge__(self, other: Self) -> bool:
+	@overload
+	def __ge__(self, other: OverloadPaddingType1) -> NotImplementedType:
+		pass
+
+	@overload
+	def __ge__(self, other: OverloadPaddingType2) -> NotImplementedType:
+		pass
+
+	def __ge__(self, other: object) -> bool | NotImplementedType:
 		if not isinstance(other, Money):
 			return NotImplemented
 		if self.currency != other.currency:
@@ -63,49 +104,81 @@ class Money(Generic[C]):
 		return self.value >= other.value
 
 	def __pos__(self) -> Self:
-		return type(self)(self.currency, +self.value)
+		return type(self)(currency = self.currency, value = +self.value)
 
 	def __neg__(self) -> Self:
-		return type(self)(self.currency, -self.value)
+		return type(self)(currency = self.currency, value = -self.value)
 
 	def __abs__(self) -> Self:
-		return type(self)(self.currency, abs(self.value))
+		return type(self)(currency = self.currency, value = abs(self.value))
 
-	def __add__(self, other: Self) -> Self:
+	@overload
+	def __add__(self, other: OverloadPaddingType1) -> NotImplementedType:
+		...
+
+	@overload
+	def __add__(self, other: OverloadPaddingType2) -> NotImplementedType:
+		...
+
+	def __add__(self, other: object) -> Self | NotImplementedType:
 		if not isinstance(other, Money):
 			return NotImplemented
 		if self.currency != other.currency:
 			raise TypeError(f"'+' not supported between money in '{self.currency}' and '{other.currency}'")
-		return type(self)(self.currency, self.value + other.value)
+		return type(self)(currency = self.currency, value = self.value + other.value)
 
-	def __sub__(self, other: Self) -> Self:
+	@overload
+	def __sub__(self, other: OverloadPaddingType1) -> NotImplementedType:
+		...
+
+	@overload
+	def __sub__(self, other: OverloadPaddingType2) -> NotImplementedType:
+		...
+
+	def __sub__(self, other: object) -> Self | NotImplementedType:
 		if not isinstance(other, Money):
 			return NotImplemented
 		if self.currency != other.currency:
 			raise TypeError(f"'-' not supported between money in '{self.currency}' and '{other.currency}'")
-		return type(self)(self.currency, self.value - other.value)
+		return type(self)(currency = self.currency, value = self.value - other.value)
 
+	@overload
+	def __mul__(self, other: OverloadPaddingType1) -> NotImplementedType:
+		...
+
+	@overload
 	def __mul__(self, other: int | decimal) -> Self:
-		if isinstance(other, int) or isinstance(other, decimal):  # type: ignore
-			return type(self)(self.currency, self.value * other)
-		return NotImplemented
+		...
 
-	def __rmul__(self, other: int | decimal) -> Self:
+	def __mul__(self, other: object) -> Self | NotImplementedType:
 		if isinstance(other, int) or isinstance(other, decimal):  # type: ignore
-			return type(self)(self.currency, self.value * other)
+			return type(self)(currency = self.currency, value = self.value * other)
 		return NotImplemented
 
 	@overload
-	def __truediv__(self, other: Self) -> decimal:
+	def __rmul__(self, other: OverloadPaddingType1) -> NotImplementedType:
+		...
+
+	@overload
+	def __rmul__(self, other: int | decimal) -> Self:
+		...
+
+	def __rmul__(self, other: object) -> Self | NotImplementedType:
+		if isinstance(other, int) or isinstance(other, decimal):  # type: ignore
+			return type(self)(currency = self.currency, value = self.value * other)
+		return NotImplemented
+
+	@overload
+	def __truediv__(self, other: OverloadPaddingType1) -> NotImplementedType:
 		...
 
 	@overload
 	def __truediv__(self, other: int | decimal) -> Self:
 		...
 
-	def __truediv__(self, other: Self | int | decimal) -> decimal | Self:
+	def __truediv__(self, other: object) -> decimal | Self | NotImplementedType:
 		if isinstance(other, int) or isinstance(other, decimal):
-			return type(self)(self.currency, self.value / other)
+			return type(self)(currency = self.currency, value = self.value / other)
 		if not isinstance(other, Money):  # type: ignore
 			return NotImplemented
 		if self.currency != other.currency:
@@ -113,13 +186,16 @@ class Money(Generic[C]):
 		return self.value / other.value
 
 	def __round__(self, ndigits: int | None = None) -> Self:
-		return type(self)(self.currency, round(self.value, ndigits))
+		return type(self)(currency = self.currency, value = round(self.value, ndigits))
 
 	def __trunc__(self) -> Self:
-		return type(self)(self.currency, math.trunc(self.value))
+		return type(self)(currency = self.currency, value = math.trunc(self.value))
 
 	def __floor__(self) -> Self:
-		return type(self)(self.currency, math.floor(self.value))
+		return type(self)(currency = self.currency, value = math.floor(self.value))
 
 	def __ceil__(self) -> Self:
-		return type(self)(self.currency, math.ceil(self.value))
+		return type(self)(currency = self.currency, value = math.ceil(self.value))
+
+
+from . import _any_money  # type: ignore
