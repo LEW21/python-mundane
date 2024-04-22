@@ -1,11 +1,10 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
 name = "mundane"
-version = "0.1.0"
-description = ''
+description = 'Pythonic Money class. Correct. Type-safe. Matches expectations.'
 readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
@@ -13,11 +12,19 @@ keywords = []
 authors = [{ name = "Linus Lewandowski", email = "linus@lew21.net" }]
 classifiers = [
 	"Development Status :: 4 - Beta",
+	"License :: OSI Approved :: MIT License",
+	"Operating System :: OS Independent",
 	"Programming Language :: Python",
 	"Programming Language :: Python :: 3.12",
 	"Programming Language :: Python :: Implementation :: CPython",
+	"Topic :: Office/Business :: Financial",
+	"Typing :: Typed",
 ]
 dependencies = []
+dynamic = ["version"]
+
+[project.urls]
+Repository = "https://github.com/LEW21/python-mundane"
 
 [tool.pyright]
 typeCheckingMode = "strict"
@@ -33,3 +40,6 @@ continuation_align_style = "fixed"
 
 [tool.hatch.build.targets.sdist]
 exclude = [".venv"]
+
+[tool.hatch.version]
+source = "vcs"
